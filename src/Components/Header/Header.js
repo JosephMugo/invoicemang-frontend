@@ -5,10 +5,10 @@ const Header = () => {
     return (
         <div className="container-lg">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <div class="container-fluid">
-                    <a href="#" className="navbar-brand">
+                <div class="header-container container-fluid">
+                    <a href="#" className="navbar-brand d-flex align-items-center">
                         <img id="logo" src={logo} alt="logo" width="40" height="40" className="d-inline-block" />
-                        InvoiceMang
+                        <h3 className="m-0">InvoiceMang</h3>
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
