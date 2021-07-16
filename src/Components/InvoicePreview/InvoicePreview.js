@@ -1,8 +1,8 @@
 import './InvoicePreview.css';
 
-const InvoicePreview = ({invoice}) => {
+const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
     return (
-        <div className="invoice-preview-container card mt-5 p-2 p-lg-4">
+        <div className="invoice-preview-container card mt-4 p-2 p-lg-4">
             <div className="invoice-header-container d-flex justify-content-between">
                 <div>
                     <h5>{invoice.seller}</h5>
@@ -58,7 +58,10 @@ const InvoicePreview = ({invoice}) => {
                     </tbody>
                 </table>
             </div>
-            <button className="btn bg-warning text-white align-self-end">Delete</button>
+            <div className="d-flex justify-content-end">
+                <button className="btn bg-dark text-white align-self-end mt-3" onClick={() => editInvoice(invoice.id)}>Edit</button>
+                <button className="btn bg-danger text-white align-self-end mt-3 ms-3" onClick={() => deleteInvoice(invoice.id)}>Delete</button>
+            </div>
         </div>
     );
 }

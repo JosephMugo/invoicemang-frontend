@@ -6,6 +6,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 function App() {
     return (
         <div className="App" style={{height: "100%"}}>
+            {/* <Home /> */}
             {/* <Login /> */}
             {/* <SignUp /> */}
             <Dashboard  />
