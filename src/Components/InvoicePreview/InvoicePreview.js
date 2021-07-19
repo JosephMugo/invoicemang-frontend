@@ -1,19 +1,34 @@
+import { string } from 'yup';
 import './InvoicePreview.css';
 
 const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
+    const capitalizeFirstLetter = (word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+    const dateConvert = (inDate) => {
+        const date = new Date(inDate);
+
+        let month = date.getMonth() + 1;
+        let day = date.getDay();
+        let year = date.getFullYear().toString().substring(2, 4);
+
+        const newFormat = month + '/' + day + '/' + year;
+        return newFormat;
+    }
+
     return (
         <div className="invoice-preview-container card mt-4 p-2 p-lg-4">
             <div className="invoice-header-container d-flex justify-content-between">
                 <div>
-                    <h5>{invoice.seller}</h5>
+                    <h5>{invoice.sellerName}</h5>
                     <p>{invoice.sellerAddress}</p>
                 </div>
-                <h5 className="d-none d-md-block">Invoice</h5>
+                <p className="d-none d-md-block">{invoice.id}</p>
             </div>
             <div className="invoice-body-container d-flex flex-column flex-md-row justify-content-between my-3">
                 <div >
                     <h6>Bill To :</h6>
-                    <p>{invoice.buyerAddress}</p>
+                    <p>{`${invoice.buyerName}`}</p>
                 </div>
                 <div >
                     <h6>Ship To :</h6>
@@ -21,21 +36,17 @@ const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
                 </div>
                 <div >
                     <div className="d-flex justify-content-between">
-                        <h6 className="mb-0 pb-0">Invoice #</h6>
-                        <p className="mb-1 ps-3">{invoice.id}</p>
-                    </div>
-                    <div className="d-flex justify-content-between">
                         <h6 className="mb-0 pb-0">Invoice Date</h6>
-                        <p className="mb-1 ps-3">{invoice.date}</p>
+                        <p className="mb-1 ps-3">{dateConvert(invoice.date)}</p>
                     </div>
                     <div className="d-flex justify-content-between">
                         <h6 className="mb-0 pb-0">Due Date</h6>
-                        <p className="mb-1 ps-3">{invoice.dueDate}</p>
+                        <p className="mb-1 ps-3">{dateConvert(invoice.dueDate)}</p>
                     </div>
                 </div>
             </div>
             <div className="table-responsive">
-                <table className="table table-striped">
+                <table className="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Description</th>
@@ -46,12 +57,12 @@ const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
                     </thead>
                     <tbody>
                         {
-                            invoice.purchase.map((purchase) => (
+                            invoice.purchases.map((purchase) => (
                                 <tr key={purchase.description}>
-                                    <th>{purchase.description}</th>
-                                    <th>{purchase.quantity}</th>
-                                    <th>${purchase.costPerUnit / 1000}</th>
-                                    <th>${purchase.total / 1000}</th>
+                                    <td scope="row">{capitalizeFirstLetter(purchase.description)}</td>
+                                    <td>{purchase.quantity}</td>
+                                    <td>${purchase.costPerUnit}</td>
+                                    <td>${(purchase.quantity * purchase.costPerUnit)}</td>
                                 </tr>
                             ))
                         }

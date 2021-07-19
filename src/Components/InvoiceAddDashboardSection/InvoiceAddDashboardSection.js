@@ -1,45 +1,15 @@
 import './InvoiceAddDashboardSection.css';
 import { useState } from 'react';
-import RowBody from '../RowBody/RowBody';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import Purchase from '../Purchase/Purchase';
 
-const InvoiceAddDashboardSection = () => {
+const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
 
-    const [rowsProductsServices, setRowsProductsServices] = useState([
-        {
-            id: uuidv4(),
-            description: "web server hosting",
-            quantity: 1,
-            costPerUnit: 50000,
-            total: 50000
-        },
-        {
-            id: uuidv4(),
-            description: "web server troubleshoot",
-            quantity: 1,
-            costPerUnit: 10000
-        },
-        {
-            id: uuidv4(),
-            description: "something",
-            quantity: 2,
-            costPerUnit: 50
-        }
-    ])
+    const [purchases, setPurchases] = useState([])
 
-    const validationSchema = yup.object({
-        buyerName: yup
-            .string('Enter buyer name')
-            .min(3, 'Buyer name must be 3 characters long')
-            .required('Buyer name is required'),
-        buyerAddress: yup
-            .string('Enter buyer address')
-            .required('Buyer address is required'),
-        buyerPhoneNumber: yup
-            .string('Enter buyer phone number')
-            .required('Buyer phone number is required'),
+    const addInvoiceSchema = yup.object({
         sellerName: yup
             .string('Enter seller name')
             .min(3, 'Seller name must be 3 characters long')
@@ -47,126 +17,171 @@ const InvoiceAddDashboardSection = () => {
         sellerAddress: yup
             .string('Enter seller address')
             .required('Seller address is required'),
-        sellerPhoneNumber: yup
-            .string('Enter seller phone number')
-            .required('Seller phone number is required')
+        buyerName: yup
+            .string('Enter buyer name')
+            .min(3, 'Buyer name must be 3 characters long')
+            .required('Buyer name is required'),
+        buyerAddress: yup
+            .string('Enter buyer address')
+            .required('Buyer address is required'),
+        date: yup
+            .string("Enter invoice date")
+            .required("Invoice date is required"),
+        dueDate: yup
+            .string("Enter due date")
+            .required("Due date is required")
     });
 
     const formik = useFormik({
         initialValues: {
-            buyerName: '',
-            buyerAddress: '',
-            buyerPhoneNumber: '',
             sellerName: '',
             sellerAddress: '',
-            sellerPhoneNumber: '',
-            productsAndServices: rowsProductsServices
+            buyerName: '',
+            buyerAddress: '',
+            id: uuidv4(),
+            date: '',
+            dueDate: ''
         },
-        validationSchema: validationSchema,
+        validationSchema: addInvoiceSchema,
         onSubmit: (data) => {
             // add invoice
-            alert(JSON.stringify(data, null, 2));
+            // TODO: Redirect user to invoice view after invoice creation
+            // TODO: add invoice to database
+            // if their is no purchases then invoice can not be submitted
+            if (purchases.length === 0) {
+                alert('No purchases given. Invoice cannot be created.');
+                return;
+            }
+            data.purchases = purchases;
+            console.log(JSON.stringify(invoices.concat(data), null, 2));
+            setInvoices(invoices.concat(data));
+            setAddView(false);
         }
     })
 
-    const onClickAddProductOrService = () => {
-        // const table = document.getElementById("productsAndServicesTable");
-        setRowsProductsServices([...rowsProductsServices, {
-            id: uuidv4(),
-            description: "",
-            quantity: "",
-            costPerUnit: ""
-        }]);
+    // add purchase 
+    const addPurchase = () => {
+        setPurchases(
+            [
+                ...purchases,
+                { 
+                    id: uuidv4(),
+                    description: '', 
+                    quantity: '', 
+                    costPerUnit: '',
+                }
+            ]
+        );
+    }
+
+    const getTodaysDate = () => {
+        const date = new Date();
+        let today = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
+                    .toISOString()
+                    .split("T")[0];
+        return today;
     }
 
     return (
         <div className="invoiceadd-section">
-            <form className="card p-3 p-lg-4 mt-4" style={{ width: "100%" }} onSubmit={formik.handleSubmit}>
+            <form className="card p-3 p-lg-4 mt-4" noValidate style={{ width: "100%" }} onSubmit={formik.handleSubmit}>
                 <div className="row">
+                    {/* Invoice Infomation */}
+                    <div className="invoiceInfo-section col-12 col-lg-6 col-md-6">
+                        <h4 className="my-4">Invoice</h4>
+                        {/* Invoice Date */}
+                        <div className="form-floating mb-4">
+                            <input
+                                id="date"
+                                className={`form-control ${formik.errors.date && formik.touched.date ? 'invalid-date' : ''}`}
+                                name="date"
+                                type="date"
+                                onChange={formik.handleChange}
+                                value={formik.values.date}
+                                min={getTodaysDate()}
+                            />
+                            <label htmlFor="floatingInput">Created</label>
+                        </div>
+                        {/* Invoice Due Date */}
+                        <div className="form-floating mb-4">
+                            <input
+                                id="dueDate"
+                                className={`form-control ${formik.errors.dueDate && formik.touched.dueDate ? 'invalid-date' : ''}`}
+                                name="dueDate"
+                                type="date"
+                                onChange={formik.handleChange}
+                                value={formik.values.dueDate}
+                                // TODO: implement date that has a min of 1 day from the invoice date
+                                min={formik.values.date}
+                            />
+                            <label htmlFor="floatingInput">Due Date</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    {/* Seller Information */}
+                    <div className="seller-section col-12 col-lg-6 col-md-6">
+                        <h4 className="my-4">Seller</h4>
+                        {/* Seller Name */}
+                        <div className="form-floating mb-4">
+                            <input
+                                id="sellerName"
+                                name="sellerName"
+                                type="text"
+                                className={`form-control ${formik.errors.sellerName && formik.touched.sellerName ? 'is-invalid' : ''}`}
+                                value={formik.values.sellerName}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            <label htmlFor="floatingInput">Name</label>
+                        </div>
+                        {/* Seller Address */}
+                        <div className="form-floating mb-4">
+                            <input
+                                id="sellerAddress"
+                                name="sellerAddress"
+                                type="text"
+                                className={`form-control ${formik.errors.sellerAddress && formik.touched.sellerAddress ? 'is-invalid' : ''}`}
+                                value={formik.values.sellerAddress}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            <label htmlFor="floatingInput">Address</label>
+                        </div>
+                    </div>
+                    {/* Buyer Information */}
                     <div className="buyer-section col-12 col-lg-6 col-md-6">
                         <h4 className="my-4">Buyer</h4>
+                        {/* Buyer Name */}
                         <div className="form-floating mb-4">
                             <input
                                 id="buyerName"
-                                // className={formik.errors.buyerName ? 
-                                //             "form-control is-invalid" : formik.errors.buyerName === undefined && buyerName.innerHTML === "" ? 
-                                //                 "form-control is-invalid" : "form-control is-valid"}
-                                className="form-control"
                                 name="buyerName"
                                 type="buyerName"
-                                onChange={formik.handleChange}
+                                className={`form-control ${formik.errors.buyerName && formik.touched.buyerName ? 'is-invalid' : ''}`}
                                 value={formik.values.buyerName}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                             />
                             <label htmlFor="floatingInput">Name</label>
-                            <div className="invalid-feedback">
-                                {formik.errors.buyerName}
-                            </div>
                         </div>
+                        {/* Buyer Address */}
                         <div className="form-floating mb-4">
-                            <input 
+                            <input
                                 id="buyerAddress"
-                                className="form-control"
-                                name="buyerAddress" 
-                                type="buyerAddress" 
-                                onChange={formik.handleChange}
+                                name="buyerAddress"
+                                type="buyerAddress"
+                                className={`form-control ${formik.errors.buyerAddress && formik.touched.buyerAddress ? 'is-invalid' : ''}`}
                                 value={formik.values.buyerAddress}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                             />
                             <label htmlFor="floatingInput">Address</label>
-                            <div className="invalid-feedback">
-                                {formik.errors.buyerAddress}
-                            </div>
-                        </div>
-                        <div className="form-floating mb-4">
-                            <input 
-                                id="buyerPhoneNumber"
-                                className="form-control"
-                                name="buyerPhoneNumber" 
-                                type="buyerPhoneNumber"
-                                onChange={formik.handleChange} 
-                                value={formik.values.buyerPhoneNumber}
-                            />
-                            <label htmlFor="floatingInput">Phone Number</label>
-                        </div>
-                    </div>
-                    <div className="seller-section col-12 col-lg-6 col-md-6">
-                        <h4 className="my-4">Seller</h4>
-                        <div className="form-floating mb-4">
-                            <input 
-                                id="sellerName"
-                                className="form-control"
-                                name="sellerName" 
-                                type="text" 
-                                onChange={formik.handleChange}
-                                value={formik.values.sellerName}
-                            />
-                            <label htmlFor="floatingInput">Name</label>
-                        </div>
-                        <div className="form-floating mb-4">
-                            <input 
-                                id="sellerAddress"
-                                className="form-control"
-                                name="sellerAddress" 
-                                type="text" 
-                                onChange={formik.handleChange}
-                                value={formik.values.sellerAddress}
-                            />
-                            <label htmlFor="floatingInput">Address</label>
-                        </div>
-                        <div className="form-floating mb-4">
-                            <input 
-                                id="sellerPhoneNumber"
-                                className="form-control"
-                                name="sellerPhoneNumber" 
-                                type="text" 
-                                onChange={formik.handleChange}
-                                value={formik.values.sellerPhoneNumber}
-                            />
-                            <label htmlFor="floatingInput">Phone Number</label>
                         </div>
                     </div>
                 </div>
                 <h4>Products & Services</h4>
-                <button type="button" className="btn btn-success align-self-start px-2 my-2" data-bs-toggle="addModal" onClick={onClickAddProductOrService}>add product or service</button>
+                <button type="button" className="btn btn-success align-self-start px-2 my-2" data-bs-toggle="addModal" onClick={addPurchase} >add product or service</button>
                 <div className="table-responsive">
                     <table className="table table-striped">
                         <thead>
@@ -179,10 +194,16 @@ const InvoiceAddDashboardSection = () => {
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <RowBody productsAndServices={rowsProductsServices} rowsProductsServices={rowsProductsServices} setRowsProductsServices={setRowsProductsServices} formik={formik}/>
+                        <tbody>
+                            {
+                                purchases.map((purchase) => (
+                                    <Purchase key={purchase.id} purchase={purchase} purchases={purchases} setPurchases={setPurchases} />
+                                ))
+                            }
+                        </tbody>
                     </table>
                 </div>
-                <button type="submit" className="btn btn-primary align-self-end px-5 mt-3">Add</button>
+                <button type="submit" className={`btn btn-primary align-self-end px-5 mt-3 `}>Add</button>
             </form>
         </div>
     );
