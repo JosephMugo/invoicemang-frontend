@@ -15,3 +15,9 @@
         font-size: .8rem;
     }
 }
+
+#quantity, #costPerUnit, #total,
+#quantityValue, #costPerUnitValue, #totalValue
+{
+    text-align: right;
+}

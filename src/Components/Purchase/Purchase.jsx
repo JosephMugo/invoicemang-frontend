@@ -1,7 +1,7 @@
 import './Purchase.css';
 import { useState } from 'react';
 
-const Purchase = ({ purchases, purchase, setPurchases }) => {
+const Purchase = ({ purchases, purchase, setPurchases, isDisabled }) => {
 
     const [description, setDescription] = useState(purchase.description);
     const [quantity, setQuantity] = useState(purchase.quantity);
@@ -57,7 +57,7 @@ const Purchase = ({ purchases, purchase, setPurchases }) => {
                     type="text"
                     value={description}
                     onChange={(e) => editField(e.target.value, setDescription)}
-                    disabled={!inEditMode}
+                    disabled={!inEditMode || isDisabled}
                     className={`${description === "" ? "invalid" : ""}`}
                 />
             </td>
@@ -67,7 +67,7 @@ const Purchase = ({ purchases, purchase, setPurchases }) => {
                     min={1}
                     value={quantity}
                     onChange={(e) => editField(e.target.value, setQuantity)}
-                    disabled={!inEditMode}
+                    disabled={!inEditMode || isDisabled}
                     className={`${quantity === "" ? "invalid" : ""}`}
                 />
             </td>
@@ -77,7 +77,7 @@ const Purchase = ({ purchases, purchase, setPurchases }) => {
                     min={1}
                     value={costPerUnit}
                     onChange={(e) => editField(e.target.value, setCostPerUnit)}
-                    disabled={!inEditMode}
+                    disabled={!inEditMode || isDisabled}
                     className={`${costPerUnit === "" ? "invalid" : ""}`}
                 />
             </td>
@@ -88,7 +88,7 @@ const Purchase = ({ purchases, purchase, setPurchases }) => {
                 />
             </td>
             {
-                inEditMode
+                inEditMode 
                     ?
                     // when editing
                     <td><button type="button" className="item-button btn p-0 border-0" onClick={() => { toggleEdit(); updateValues()}}><i className="fa fa-check"></i></button></td>

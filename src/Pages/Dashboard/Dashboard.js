@@ -52,16 +52,11 @@ const Dashboard = () => {
         setInvoices(invoices.filter(invoice => invoice.id !== id))
     }
 
-    const editInvoice = (id) => {
-        // TODO: Create edit view completely seperate from invoice view where edit button is 
-        alert("editing: "+ id);
-    }
-
     return (
         <div className="dashboard-container">
             <SideBar />
             <div className="content-container bg-dark p-4">
-                <InvoicesViewDashboardSection invoices={invoices} deleteInvoice={deleteInvoice} editInvoice={editInvoice} setInvoices={setInvoices} />
+                <InvoicesViewDashboardSection invoices={invoices} deleteInvoice={deleteInvoice} setInvoices={setInvoices} />
                 {/* <UserDashboardSection {...user}/> */}
             </div>
         </div>

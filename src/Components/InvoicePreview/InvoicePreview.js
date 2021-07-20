@@ -9,8 +9,16 @@ const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
         const date = new Date(inDate);
 
         let month = date.getMonth() + 1;
+        if (month < 10) {
+            month = '0' + month
+        }
+
         let day = date.getDay();
-        let year = date.getFullYear().toString().substring(2, 4);
+        if (day < 10) {
+            day = '0' + day;
+        }
+
+        let year = date.getFullYear().toString();
 
         const newFormat = month + '/' + day + '/' + year;
         return newFormat;
@@ -50,19 +58,19 @@ const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
                     <thead>
                         <tr>
                             <th scope="col">Description</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Cost Per Unit</th>
-                            <th scope="col">Total</th>
+                            <th scope="col" id="quantity">Quantity</th>
+                            <th scope="col" id="costPerUnit">Cost Per Unit</th>
+                            <th scope="col" id="total">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             invoice.purchases.map((purchase) => (
                                 <tr key={purchase.description}>
-                                    <td scope="row">{capitalizeFirstLetter(purchase.description)}</td>
-                                    <td>{purchase.quantity}</td>
-                                    <td>${purchase.costPerUnit}</td>
-                                    <td>${(purchase.quantity * purchase.costPerUnit)}</td>
+                                    <td>{capitalizeFirstLetter(purchase.description)}</td>
+                                    <td id="quantityValue">{purchase.quantity}</td>
+                                    <td id="costPerUnitValue">${purchase.costPerUnit}</td>
+                                    <td id="totalValue">${(purchase.quantity * purchase.costPerUnit)}</td>
                                 </tr>
                             ))
                         }

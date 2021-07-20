@@ -52,12 +52,27 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
                 alert('No purchases given. Invoice cannot be created.');
                 return;
             }
+            let fail = false;
+            purchases.forEach((purchase) => {
+                if (purchase.description === undefined || purchase.description === "") {
+                    fail = true;
+                }
+                if (purchase.quantity === undefined || purchase.quantity === "") {
+                    fail = true;
+                }
+                if (purchase.costPerUnit === undefined || purchase.costPerUnit === "") {
+                    fail = true;
+                }
+            })
+            if (fail) {
+                return;
+            }
             data.purchases = purchases;
             console.log(JSON.stringify(invoices.concat(data), null, 2));
             setInvoices(invoices.concat(data));
             setAddView(false);
         }
-    })
+    });
 
     // add purchase 
     const addPurchase = () => {
