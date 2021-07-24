@@ -2,6 +2,7 @@ import './Login.css';
 import * as yup from 'yup';
 import logo from '../../resources/images/invoicemang_icon.svg';
 import { useFormik } from 'formik';
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
@@ -23,9 +24,9 @@ const Login = () => {
 
     return (
         <div className="login-container">
-            <a href="#return">
+            <Link to="/home">
                 <i id="return" class="fas fa-arrow-left"></i>
-            </a>
+            </Link>
             <form onSubmit={handleSubmit}>
                 <div className="d-flex flex-column align-items-center justify-content-evenly mb-4">
                     <img src={logo} width="85rem" height="85rem" />
@@ -40,7 +41,7 @@ const Login = () => {
                     <label for="floatingInput">Password</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Sign in</button>
-                <a id="create-account-link" className="d-block my-3 text-end" href="#create">Create account</a>
+                <Link to="/signup"><a id="create-account-link" className="d-block my-3 text-end">Create account</a></Link>
             </form>
         </div>
     );

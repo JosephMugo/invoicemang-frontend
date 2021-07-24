@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import logo from '../../resources/images/invoicemang_icon.svg';
 import passwordBlacklist from '../../resources/passwordBlacklist';
 import { useFormik } from 'formik';
+import { Link } from 'react-router-dom';
 
 const SignUpSchema = yup.object({
     firstName: yup
@@ -46,9 +47,9 @@ const SignUp = () => {
     
     return (
         <div className="signup-container">
-            <a href="#return">
+            <Link to="/home">
                 <i id="return" class="fas fa-arrow-left"></i>
-            </a>
+            </Link>
             <form onSubmit={handleSubmit}>
                 <div className="d-flex flex-column align-items-center justify-content-evenly mb-4">
                     <img src={logo} width="85rem" height="85rem" />

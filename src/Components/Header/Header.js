@@ -1,5 +1,6 @@
 import './Header.css';
 import logo from '../../resources/images/invoicemang_icon.svg';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     return (
@@ -10,19 +11,23 @@ const Header = () => {
                         <img id="logo" src={logo} alt="logo" width="40" height="40" className="d-inline-block" />
                         <h3 className="m-0">InvoiceMang</h3>
                     </a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <a className="nav-link" aria-current="page" href="#">LOGIN</a>
+                                <Link to="/login">
+                                    <a className="nav-link" aria-current="page" href="#">LOGIN</a>
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">SIGN UP</a>
+                                <Link to="/signup">
+                                    <a className="nav-link" href="#">SIGN UP</a>
+                                </Link>
                             </li>
                         </ul>
-                    </div>
+                    </div> */}
                 </div>
             </nav>
         </div>

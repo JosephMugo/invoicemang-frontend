@@ -1,6 +1,7 @@
 import './UserDashboardSection.css';
 
-const UserDashboardSection = ({username, position}) => {
+const UserDashboardSection = ({username, position, setPage}) => {
+    setPage('USER_VIEW');
     return (
         <div className="usersection-container">
             <h2 className="text-white">User Dashboard</h2>

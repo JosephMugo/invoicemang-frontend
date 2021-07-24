@@ -3,14 +3,22 @@ import logo from '../../resources/images/invoicemang_icon.svg';
 import LandingDashboardSection from '../../Components/LandingDashboardSection/LandingDashboardSection';
 import InvoicesViewDashboardSection from '../../Components/InvoicesViewDashboardSection/InvoicesViewDashboardSection';
 import UserDashboardSection from '../../Components/UserDashboardSection/UserDashboardSection';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SideBar from '../../Components/SideBar/SideBar';
+import { Switch, useRouteMatch, Route } from 'react-router-dom';
 
 
 const user = { username: "abc123", position: "customer" }
+const pageState = {
+    DASHBOARD: "DASHBOARD_VIEW", 
+    USER: "USER_VIEW" 
+}
 
 const Dashboard = () => {
+    const [page, setPage] = useState(pageState.USER);
+    let match = useRouteMatch();
+
     const [invoices, setInvoices] = useState([
         {
             id: uuidv4(),
@@ -54,10 +62,14 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <SideBar />
+            <SideBar page={page} match={match} />
             <div className="content-container bg-dark p-4">
-                <InvoicesViewDashboardSection invoices={invoices} deleteInvoice={deleteInvoice} setInvoices={setInvoices} />
-                {/* <UserDashboardSection {...user}/> */}
+                <Switch>
+                    <Route path={`${match.path}/view`}>
+                        <InvoicesViewDashboardSection invoices={invoices} deleteInvoice={deleteInvoice} setInvoices={setInvoices} setPage={setPage}/>
+                    </Route>
+                    {/* <UserDashboardSection {...user} setPage={setPage}/> */}
+                </Switch>
             </div>
         </div>
     );

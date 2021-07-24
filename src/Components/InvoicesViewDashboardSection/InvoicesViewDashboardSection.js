@@ -4,7 +4,9 @@ import { useState } from 'react';
 import InvoiceAddDashboardSection from '../InvoiceAddDashboardSection/InvoiceAddDashboardSection';
 import EditInvoiceView from '../EditInvoiceView/EditInvoiceView';
 
-const InvoicesViewDashboardSection = ({ invoices, deleteInvoice, setInvoices }) => {
+const InvoicesViewDashboardSection = ({ invoices, deleteInvoice, setInvoices, setPage }) => {
+
+    setPage('DASHBOARD_VIEW');
 
     const [addView, setAddView] = useState(false);
     const [editView, setEditView] = useState({editing: false, id: null});
