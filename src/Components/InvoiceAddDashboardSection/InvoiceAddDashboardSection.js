@@ -5,9 +5,27 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Purchase from '../Purchase/Purchase';
 
-const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
+const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView, getInvoices }) => {
 
-    const [purchases, setPurchases] = useState([])
+    const [purchases, setPurchases] = useState([]);
+    const [purchaseDescription, setPurchaseDescription] = useState('');
+    const [purchaseQuantity, setPurchaseQuantity] = useState('');
+    const [purchaseCostPerUnit, setPurchaseCostPerUnit] = useState('');
+
+    const addInvoice = async (data) => {
+        await fetch("http://localhost:8080/invoices", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            getInvoices();
+            setAddView(false);
+        })
+        .catch((error) => alert(`Something went wrong: ${error}`));
+    }
 
     const addInvoiceSchema = yup.object({
         sellerName: yup
@@ -38,7 +56,6 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
             sellerAddress: '',
             buyerName: '',
             buyerAddress: '',
-            id: uuidv4(),
             date: '',
             dueDate: ''
         },
@@ -55,38 +72,67 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
             let fail = false;
             purchases.forEach((purchase) => {
                 if (purchase.description === undefined || purchase.description === "") {
+                    alert('description');
                     fail = true;
                 }
                 if (purchase.quantity === undefined || purchase.quantity === "") {
+                    alert('quantity');
                     fail = true;
                 }
                 if (purchase.costPerUnit === undefined || purchase.costPerUnit === "") {
+                    alert('cost per unit');
                     fail = true;
                 }
             })
             if (fail) {
+                alert('failed');
                 return;
             }
             data.purchases = purchases;
-            console.log(JSON.stringify(invoices.concat(data), null, 2));
-            setInvoices(invoices.concat(data));
-            setAddView(false);
+            // alert(data.purchases);
+            addInvoice(data);
         }
     });
 
     // add purchase 
     const addPurchase = () => {
+        if (purchaseDescription === "") {
+            alert('Description required');
+            return;
+        }
+        if (purchaseQuantity <= 0) {
+            alert('Quantity required');
+            setPurchaseQuantity(1);
+            return;
+        }
+        if (purchaseCostPerUnit <= 0) {
+            alert('Cost per unit required');
+            setPurchaseCostPerUnit(1);
+            return;
+        }
+        let same = false;
+        purchases.forEach(purchase => {
+            if (purchase.description === purchaseDescription) {
+                alert('Can not add the same product/service');
+                same = true;
+            }
+        })
+        if (same) {
+            return;
+        }
         setPurchases(
             [
                 ...purchases,
                 { 
-                    id: uuidv4(),
-                    description: '', 
-                    quantity: '', 
-                    costPerUnit: '',
+                    description: purchaseDescription, 
+                    quantity: purchaseQuantity, 
+                    costPerUnit: purchaseCostPerUnit,
                 }
             ]
         );
+        setPurchaseDescription('');
+        setPurchaseQuantity('');
+        setPurchaseCostPerUnit('');
     }
 
     const getTodaysDate = () => {
@@ -95,6 +141,11 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
                     .toISOString()
                     .split("T")[0];
         return today;
+    }
+
+    // edit input field provided
+    const editField = (value, setter) => {
+        setter(value);
     }
 
     return (
@@ -196,7 +247,56 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
                     </div>
                 </div>
                 <h4>Products & Services</h4>
-                <button type="button" className="btn btn-success align-self-start px-2 my-2" data-bs-toggle="addModal" onClick={addPurchase} >add product or service</button>
+                <p id="instructions">please input product/service information then add. (use unique description)</p>
+                <div className="table-responsive">
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Description</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Cost Per Unit</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input 
+                                        text="text"
+                                        value={purchaseDescription}
+                                        onChange={(e) => editField(e.target.value, setPurchaseDescription)}
+                                        className={`${purchaseDescription === "" ? "invalid" : ""}`}
+                                    />
+                                </td>
+                                <td>
+                                    <input 
+                                        type="number"
+                                        min={1}
+                                        value={purchaseQuantity}
+                                        onChange={(e) => editField(e.target.value, setPurchaseQuantity)}
+                                        className={`${purchaseQuantity === "" ? "invalid" : ""}`}
+                                    />
+                                </td>
+                                <td>
+                                    <input 
+                                        type="number"
+                                        min={1}
+                                        value={purchaseCostPerUnit}
+                                        onChange={(e) => editField(e.target.value, setPurchaseCostPerUnit)}
+                                        className={`${purchaseCostPerUnit === "" ? "invalid" : ""}`}
+                                    />
+                                </td>
+                                <td>
+                                    <input 
+                                        value={purchaseQuantity * purchaseCostPerUnit}
+                                        disabled
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" className="btn btn-success align-self-start px-2 my-2" data-bs-toggle="addModal" onClick={addPurchase} >add product/service</button>
                 <div className="table-responsive">
                     <table className="table table-striped">
                         <thead>
@@ -206,13 +306,12 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView }) => {
                                 <th scope="col">Cost Per Unit</th>
                                 <th scope="col">Total</th>
                                 <th scope="col"></th>
-                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 purchases.map((purchase) => (
-                                    <Purchase key={purchase.id} purchase={purchase} purchases={purchases} setPurchases={setPurchases} />
+                                    <Purchase key={purchase.description} purchase={purchase} purchases={purchases} setPurchases={setPurchases} />
                                 ))
                             }
                         </tbody>

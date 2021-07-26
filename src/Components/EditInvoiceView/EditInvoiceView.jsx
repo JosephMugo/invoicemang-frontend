@@ -30,26 +30,18 @@ const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
         return `${year}-${month}-${day}`;
     }
 
-    const updateInvoice = (data) => {
-        const result = invoices.filter(invoiceItem => invoiceItem.id !== invoice.id);
-        setInvoices(
-            [
-                ...result, 
-                { 
-                    id: invoice.id,
-                    sellerName: invoice.sellerName, 
-                    sellerAddress: data.sellerAddress, 
-                    buyerName: invoice.buyerName,
-                    buyerAddress: data.buyerAddress,
-                    date: invoice.date,
-                    dueDate: data.dueDate,
-                    purchases: invoice.purchases
-                }
-            ]
-        );
-        setEditView(true);
-        // TODO: call update endpoint to update invoice
-        // alert(JSON.stringify(data, 2, null));
+    const updateInvoice = async (data) => {
+        await fetch(`http://localhost:8080/invoices/${invoice.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            setEditView(false);
+        })
+        .catch((error) => alert(`Something went wrong: ${error}`));
     }
 
     const addInvoiceSchema = yup.object({
@@ -76,13 +68,20 @@ const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
         },
         validationSchema: addInvoiceSchema,
         onSubmit: (data) => {
-            const dueDate = data.dueDate;
+            const sellerName = data.sellerName;
             const sellerAddress = data.sellerAddress;
+            const buyerName = data.buyerName;
             const buyerAddress = data.buyerAddress;
+            const date = data.date;
+            const dueDate = data.dueDate;
+            
             const submitData = {
-                dueDate: dueDate,
+                sellerName: sellerName,
                 sellerAddress: sellerAddress,
-                buyerAddress: buyerAddress
+                buyerName: buyerName,
+                buyerAddress: buyerAddress,
+                date: date,
+                dueDate: dueDate
             }
             updateInvoice(submitData);
         }

@@ -19,34 +19,21 @@ const Dashboard = () => {
     const [page, setPage] = useState(pageState.USER);
     let match = useRouteMatch();
 
-    const [invoices, setInvoices] = useState([
-        {
-            id: uuidv4(),
-            sellerName: "Amazon Web Service",
-            sellerAddress: "456 capital dr",
-            buyerName: "InvoiceMang",
-            buyerAddress: "123 wonder dr",
-            date: "7/6/21",
-            dueDate: "2/12/24",
-            purchases: [
-                {
-                    description: "web server hosting",
-                    quantity: 1,
-                    costPerUnit: 5
-                },
-                {
-                    description: "web server troubleshoot",
-                    quantity: 5,
-                    costPerUnit: 10
-                },
-                {
-                    description: "web server backup",
-                    quantity: 1,
-                    costPerUnit: 20
-                }
-            ]
-        }
-    ]);
+    const [invoices, setInvoices] = useState([]);
+
+    const getInvoices = () => {
+        fetch("http://localhost:8080/invoices")
+        .then(response => response.json())
+        .then(data => setInvoices(data))
+        .catch((error) => alert(error));
+    }
+
+    // fetch invoice on dashboard visit
+    useEffect(() => {
+        getInvoices();
+    }, []);
+
+
     
     // delete invoice from view and database
     const deleteInvoice = (id) => {
@@ -57,7 +44,11 @@ const Dashboard = () => {
             return;
         }
         // delete invoice
-        setInvoices(invoices.filter(invoice => invoice.id !== id))
+        fetch(`http://localhost:8080/invoices/${id}`, {
+            method: "DELETE"
+        }).then(() => getInvoices())
+        .catch((error) => alert(error));
+        
     }
 
     return (
@@ -66,7 +57,7 @@ const Dashboard = () => {
             <div className="content-container bg-dark p-4">
                 <Switch>
                     <Route path={`${match.path}/view`}>
-                        <InvoicesViewDashboardSection invoices={invoices} deleteInvoice={deleteInvoice} setInvoices={setInvoices} setPage={setPage}/>
+                        <InvoicesViewDashboardSection invoices={invoices} deleteInvoice={deleteInvoice} setInvoices={setInvoices} setPage={setPage} getInvoices={getInvoices}/>
                     </Route>
                     {/* <UserDashboardSection {...user} setPage={setPage}/> */}
                 </Switch>
