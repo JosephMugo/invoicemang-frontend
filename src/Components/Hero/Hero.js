@@ -4,7 +4,7 @@ import './Hero.css';
 const Hero = () => {
     return (
         <div className="hero-container bg-dark">
-            <div className="container-lg">
+            <div className="container-lg mobile-space">
                 <div className="py-5">
                     <h1 className="display-6 fw-bold text-white text-wrap">Taking the pain out of invoice management.</h1>
                 </div>

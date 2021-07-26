@@ -12,22 +12,8 @@ const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
     const invoice = invoices.filter(invoice => invoice.id === editView.id)[0];
     const [purchases, setPurchases] = useState(invoice.purchases);
 
-    const convertDateFormat = (date) => {
-        let d = new Date(date);
-
-        let year = d.getFullYear();
-
-        let month = d.getMonth() + 1;
-        if (month < 10) {
-            month = '0' + month
-        }
-
-        let day = d.getDay();
-        if (day < 10) {
-            day = '0' + day;
-        }
-
-        return `${year}-${month}-${day}`;
+    const dateConvert = (date) => {
+        return date.substring(0, 10);
     }
 
     const updateInvoice = async (data) => {
@@ -63,8 +49,8 @@ const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
             buyerName: invoice.buyerName,
             buyerAddress: invoice.buyerAddress,
             id: invoice.id,
-            date: convertDateFormat(invoice.date),
-            dueDate: convertDateFormat(invoice.dueDate)
+            date: dateConvert(invoice.date),
+            dueDate: dateConvert(invoice.dueDate)
         },
         validationSchema: addInvoiceSchema,
         onSubmit: (data) => {

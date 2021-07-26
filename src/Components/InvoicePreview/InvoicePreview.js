@@ -5,23 +5,9 @@ const InvoicePreview = ({ invoice, deleteInvoice, editInvoice }) => {
     const capitalizeFirstLetter = (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
-    const dateConvert = (inDate) => {
-        const date = new Date(inDate);
 
-        let month = date.getMonth() + 1;
-        if (month < 10) {
-            month = '0' + month
-        }
-
-        let day = date.getDay();
-        if (day < 10) {
-            day = '0' + day;
-        }
-
-        let year = date.getFullYear().toString();
-
-        const newFormat = month + '/' + day + '/' + year;
-        return newFormat;
+    const dateConvert = (date) => {
+        return date.substring(0, 10);
     }
 
     return (
