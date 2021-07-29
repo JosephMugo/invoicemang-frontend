@@ -1,0 +1,25 @@
+* {
+    box-sizing: border-box;
+}
+
+.fa-edit, .fa-trash, .fa-check {
+    font-size: 1.3rem;
+}
+
+.fa-trash {
+    color: #f15050;
+}
+
+.fa-check {
+    color: green;
+}
+
+.fa-check:hover {
+    color: rgb(2, 83, 2);
+}
+
+.fa-trash:hover, .fa-trash:active {
+    color: #ff0101;
+}
+
+

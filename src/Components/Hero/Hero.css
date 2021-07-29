@@ -1,0 +1,11 @@
+.hero-container {
+    padding: 8rem 0;
+}
+
+.hero-container h1 {
+    max-width: 45%;
+}
+
+.mobile-space {
+    padding: 0 1.75rem;
+}

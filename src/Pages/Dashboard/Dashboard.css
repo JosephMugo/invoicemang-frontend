@@ -1,0 +1,50 @@
+.dashboard-container {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.fa, .fas {
+    font-size: 1.5rem;
+    color: #a09c9e;
+}
+
+.fa:hover, .fa:focus,
+.fas:hover, .fa:focus,
+.fa.active,
+.fas.active {
+    color: #212529;
+}
+
+#logout:hover, #logout:focus {
+    color: red;
+}
+
+.nav-link {
+    margin: 0 auto;
+}
+
+.content-container {
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+#greeting-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.welcome-card {
+    overflow: hidden;
+}
+
+@media (min-width: 500px) {
+    .welcome-card {
+    }
+    #greeting-img {
+        
+    }
+}

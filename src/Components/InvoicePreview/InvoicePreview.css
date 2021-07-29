@@ -1,0 +1,23 @@
+@media only screen and (max-width: 500px) {
+    th {
+        font-size: .6rem;
+    }
+    h5 {
+        font-size: 1rem;
+    }
+    h6 {
+        font-size: .9rem;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+    th {
+        font-size: .8rem;
+    }
+}
+
+#quantity, #costPerUnit, #total,
+#quantityValue, #costPerUnitValue, #totalValue
+{
+    text-align: right;
+}
