@@ -1,8 +1,7 @@
 # invoicemang-frontend
 <i>Joseph Mugo</i>
 
-InvoiceMang allow for users to create, view, edit, and delete invoices. It takes away the pain away of dealing with physical
-invoices and takes advantage of the pros of being digital.
+InvoiceMang is an invoice management web application that allows you to create, view, update, and delete invoices in a user-friendly dashboard. The web application ensures that you can access your invoices anytime from anywhere.
 
 ## Getting Started
 Base Url: http://localhost:3000 (react default port)
