@@ -1,9 +1,9 @@
 import Header from "../../Components/Header/Header";
 import Hero from "../../Components/Hero/Hero";
 import InfoSection from "../../Components/InfoSection/InfoSection";
-import accessImg from 'C:/Users/Joseph/Desktop/Accelerated IT Program/proj/invoicemang-frontend/src/resources/images/world.svg';
-import backupImg from 'C:/Users/Joseph/Desktop/Accelerated IT Program/proj/invoicemang-frontend/src/resources/images/cloud.svg';
-import securityImg from 'C:/Users/Joseph/Desktop/Accelerated IT Program/proj/invoicemang-frontend/src/resources/images/lock.svg';
+import accessImg from '../../resources/images/world.svg';
+import backupImg from '../../resources/images/cloud.svg';
+import securityImg from '../../resources/images/lock.svg';
 import Footer from "../../Components/Footer/Footer";
 
 const data = [
