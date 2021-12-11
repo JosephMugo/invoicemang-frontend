@@ -2,26 +2,22 @@ import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
+import PublicRoute from "./utils/PublicRoute/PublicRoute";
+import PrivateRoute from "./utils/PrivateRoute/PrivateRoute";
+
+const NotFound = () => (<Redirect path="/login" />);
 
 function App() {
     return (
         <div className="App" style={{height: "100%"}}>
-            {/* <Dashboard  /> */}
             <Router>
                 <Switch>
-                    <Route path="/dashboard">
-                        <Dashboard />
-                    </Route>
-                    <Route path="/login">
-                        <Login />
-                    </Route>
-                    <Route path="/signup">
-                        <SignUp />
-                    </Route>
-                    <Route path="/">
-                        <Home />
-                    </Route>
+                    <PrivateRoute component={Dashboard} path="/dashboard" exact />
+                    <PublicRoute restricted={true} component={Login} path="/login" exact />
+                    <PublicRoute restricted={true} component={SignUp} path="/signup" exact />
+                    <PublicRoute restricted={false} component={Home} path="/" exact />
+                    <Route component={NotFound} />
                 </Switch>
             </Router>
         </div>
