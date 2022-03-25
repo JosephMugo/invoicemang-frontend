@@ -6,6 +6,22 @@ import { Link } from "react-router-dom";
 
 const Login = () => {
 
+    const login = async () => {
+        const response = await fetch("http://localhost:8080/api/auth/signin", {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'username': 'admin',
+                'password': '1234password'
+            })
+        });
+        return response.json();
+    }
+
     const LoginSchema = yup.object().shape({
         username: yup.string().required,
         password: yup.string().required
@@ -17,7 +33,9 @@ const Login = () => {
             password: ''
         },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
+            login()
+            .then(data => localStorage.setItem('USER_AUTH', JSON.stringify(data)));
         }
     })
 
