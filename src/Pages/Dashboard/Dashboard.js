@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SideBar from '../../Components/SideBar/SideBar';
 import { Switch, useRouteMatch, Route } from 'react-router-dom';
+import userService from '../../services/user.service';
 
 
 const user = { username: "abc123", position: "customer" }
@@ -22,9 +23,8 @@ const Dashboard = () => {
     const [invoices, setInvoices] = useState([]);
 
     const getInvoices = () => {
-        fetch("http://localhost:8080/invoices")
-        .then(response => response.json())
-        .then(data => setInvoices(data))
+        userService.getInvoices()
+        .then(response => setInvoices(response.data))
         .catch((error) => alert(error));
     }
 
@@ -44,9 +44,8 @@ const Dashboard = () => {
             return;
         }
         // delete invoice
-        fetch(`http://localhost:8080/invoices/${id}`, {
-            method: "DELETE"
-        }).then(() => getInvoices())
+        userService.deleteInvoiceById(id)
+        .then(() => getInvoices())
         .catch((error) => alert(error));
         
     }

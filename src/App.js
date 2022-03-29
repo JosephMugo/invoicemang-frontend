@@ -5,13 +5,15 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import PrivateRoute from "./Routes/PrivateRoute";
 import PublicRoute from "./Routes/PublicRoute";
-import { AuthContext, useAuth } from "./Auth/useAuth";
+import { useState } from "react";
+import { useEffect } from "react";
+import AuthService from "./services/auth.service";
+import { AuthContextProvider } from "./Auth/AuthContext";
 
 function App() {
-    // figure out how to pass auth to the provider
     return (
         <div className="App" style={{height: "100%"}}>
-            <AuthContext.Provider value={false}>
+            <AuthContextProvider>
                 <Router>
                     <Switch>
                         <PrivateRoute path="/dashboard" component={Dashboard} />
@@ -20,7 +22,7 @@ function App() {
                         <PublicRoute restricted={false} path="/" component={Home} />
                     </Switch>
                 </Router>
-            </AuthContext.Provider>
+            </AuthContextProvider>
         </div>
     )
 }

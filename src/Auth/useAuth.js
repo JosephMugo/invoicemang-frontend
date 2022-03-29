@@ -1,22 +1,8 @@
-import { useState, createContext, useContext } from 'react';
+import { useState } from 'react';
+import authService from '../services/auth.service';
 
-export const AuthContext = createContext(true);
-
-
-// const auth = () => {
-//     const [auth, setAuth] = useState(true);
-
-//     const login = () => setAuth(true);
-//     const logout = () => setAuth(false);
-
-//     return {
-//         auth,
-//         login,
-//         logout
-//     }
+// const useAuth = () => {
+//     const [isAuthenticated, setIsAuthenticated] = useState(authService.getAuthState());
+    
+//     return isAuthenticated;
 // }
-
-export const useAuth = () => {
-    return useContext(AuthContext);
-}
-

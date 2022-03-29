@@ -1,7 +1,16 @@
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import logo from '../../resources/images/invoicemang_icon.svg';
+import AuthService from '../../services/auth.service';
 
 const SideBar = ({ page, match }) => {
+    const history = useHistory();
+
+    const handleLogout = () => {
+        AuthService.logout();
+        history.push('/home');
+    }
+
     return (
         <div className="sidebar-container d-flex flex-column flex-shrink-0 bg-light" style={{ width: "4.5rem" }}>
                 <div>
@@ -26,13 +35,11 @@ const SideBar = ({ page, match }) => {
                                 </button>
                             </li>
                         </Link> */}
-                        <Link to="/home">
-                            <li className="border-bottom">
-                                <button href="#" className="nav-link py-3" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="logout">
-                                    <i id="logout" className="fas fa-sign-out-alt" role="img" aria-label="logout"></i>
-                                </button>
-                            </li>
-                        </Link>
+                        <li className="border-bottom">
+                            <button href="#" className="nav-link py-3" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="logout" onClick={handleLogout}>
+                                <i id="logout" className="fas fa-sign-out-alt" role="img" aria-label="logout"></i>
+                            </button>
+                        </li>
                     </div>
                 </ul>
             </div>

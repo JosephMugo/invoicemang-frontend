@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Purchase from '../Purchase/Purchase';
+import userService from '../../services/user.service';
 
 const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView, getInvoices }) => {
 
@@ -13,19 +14,29 @@ const InvoiceAddDashboardSection = ({ invoices, setInvoices, setAddView, getInvo
     const [purchaseCostPerUnit, setPurchaseCostPerUnit] = useState('');
 
     const addInvoice = async (data) => {
-        await fetch("http://localhost:8080/invoices", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
+        alert('Adding Invoice');
+        userService.addInvoice(data)
         .then(() => {
             getInvoices();
             setAddView(false);
         })
         .catch((error) => alert(`Something went wrong: ${error}`));
     }
+
+    // const addInvoice = async (data) => {
+    //     await fetch("http://localhost:8080/invoices", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(data)
+    //     })
+    //     .then(() => {
+    //         getInvoices();
+    //         setAddView(false);
+    //     })
+    //     .catch((error) => alert(`Something went wrong: ${error}`));
+    // }
 
     const addInvoiceSchema = yup.object({
         sellerName: yup

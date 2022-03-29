@@ -5,6 +5,9 @@ import accessImg from '../../resources/images/world.svg';
 import backupImg from '../../resources/images/cloud.svg';
 import securityImg from '../../resources/images/lock.svg';
 import Footer from "../../Components/Footer/Footer";
+import { useEffect, useContext } from "react";
+import AuthService from "../../services/auth.service";
+import { AuthContext } from "../../Auth/AuthContext";
 
 const data = [
     {
@@ -26,6 +29,14 @@ const data = [
 
 const Home = () => {
     let amountRendered = 0;
+
+    const [auth, setAuth] = useContext(AuthContext)
+
+    useEffect(() => {
+        AuthService.logout();
+        setAuth(false);
+    }, [])
+    
     return (
         <div className="home-container">
             <Header />

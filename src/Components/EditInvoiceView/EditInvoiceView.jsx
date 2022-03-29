@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import PurchaseEditView from '../PurchaseEditView/PurchaseEditView';
+import userService from '../../services/user.service';
 
 const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
 
@@ -16,14 +17,8 @@ const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
         return date.substring(0, 10);
     }
 
-    const updateInvoice = async (data) => {
-        await fetch(`http://localhost:8080/invoices/${invoice.id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
+    const updateInvoice = async (id, data) => {
+        userService.updateInvoice(id, data)
         .then(() => {
             setEditView(false);
         })
@@ -69,7 +64,7 @@ const EditInvoiceView = ({ editView, setEditView, invoices, setInvoices }) => {
                 date: date,
                 dueDate: dueDate
             }
-            updateInvoice(submitData);
+            updateInvoice(data.id, submitData);
         }
     });
 

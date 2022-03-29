@@ -4,6 +4,7 @@ import logo from '../../resources/images/invoicemang_icon.svg';
 import passwordBlacklist from '../../resources/passwordBlacklist';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const SignUpSchema = yup.object({
     firstName: yup
@@ -31,6 +32,8 @@ const SignUpSchema = yup.object({
 
 const SignUp = () => {
 
+    const history = useHistory();
+
     const {handleSubmit, handleChange} = useFormik({
         initialValues: {
             firstName: '',
@@ -44,6 +47,10 @@ const SignUp = () => {
             alert(JSON.stringify(data, null, 2));
         }
     })
+
+    const handleSignup = () => {
+        history.push('/login')
+    }
     
     return (
         <div className="signup-container">
@@ -76,8 +83,8 @@ const SignUp = () => {
                     <label for="floatingInput">Cofirm Password</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Register</button>
-                <a id="login-link" className="d-block my-3 text-end" href="#login">Login</a>
             </form>
+            <button id="login-link" className="d-block my-3 text-end" href="#login" onClick={handleSignup}>Login</button>
         </div>
     );
 }

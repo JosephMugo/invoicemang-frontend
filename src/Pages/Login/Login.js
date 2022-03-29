@@ -2,25 +2,16 @@ import './Login.css';
 import * as yup from 'yup';
 import logo from '../../resources/images/invoicemang_icon.svg';
 import { useFormik } from 'formik';
+import { useContext } from 'react';
 import { Link } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
+import AuthService from '../../services/auth.service';
+import { AuthContext } from '../../Auth/AuthContext';
 
 const Login = () => {
 
-    const login = async () => {
-        const response = await fetch("http://localhost:8080/api/auth/signin", {
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'username': 'admin',
-                'password': '1234password'
-            })
-        });
-        return response.json();
-    }
+    const history = useHistory();
+    const [auth, setAuth] = useContext(AuthContext);
 
     const LoginSchema = yup.object().shape({
         username: yup.string().required,
@@ -32,12 +23,22 @@ const Login = () => {
             username: '',
             password: ''
         },
+        LoginSchema,
         onSubmit: values => {
-            // alert(JSON.stringify(values, null, 2));
-            login()
-            .then(data => localStorage.setItem('USER_AUTH', JSON.stringify(data)));
+            AuthService.login(values.username, values.password)
+            .then(() => {
+                alert('Success');
+                setAuth(true);
+            })
+            .catch((e) => {
+                alert(e);
+            })
         }
     })
+
+    const handleCreateAccount = () => {
+        history.push('/dashboard/view')
+    }
 
 
     return (
@@ -59,8 +60,8 @@ const Login = () => {
                     <label for="floatingInput">Password</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Sign in</button>
-                <Link to="/signup"><a id="create-account-link" className="d-block my-3 text-end">Create account</a></Link>
             </form>
+            <button id="create-account-link" className="d-block my-3 text-end" onClick={handleCreateAccount}>Create account</button>
         </div>
     );
 }
