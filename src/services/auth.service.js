@@ -7,7 +7,8 @@ const AuthService = {
     return axios.post(API_URL + "signup", {
       username,
       email,
-      password,
+      password: password,
+      role: ["user"]
     });
   },
   login: (username, password) => {

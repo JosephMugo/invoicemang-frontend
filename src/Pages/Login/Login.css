@@ -19,3 +19,10 @@ form {
     font-size: 2rem;
     color: black;
 }
+
+#create-account-link {
+    color: blue;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid black;
+}

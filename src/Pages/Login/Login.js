@@ -27,7 +27,6 @@ const Login = () => {
         onSubmit: values => {
             AuthService.login(values.username, values.password)
             .then(() => {
-                alert('Success');
                 setAuth(true);
             })
             .catch((e) => {
@@ -36,8 +35,9 @@ const Login = () => {
         }
     })
 
-    const handleCreateAccount = () => {
-        history.push('/dashboard/view')
+    const handleCreateAccount = (event) => {
+        event.preventDefault();
+        history.push('/signup')
     }
 
 
@@ -60,8 +60,8 @@ const Login = () => {
                     <label for="floatingInput">Password</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Sign in</button>
+                <button id="create-account-link" className="d-block my-3 text-end" onClick={handleCreateAccount}>Create account</button>
             </form>
-            <button id="create-account-link" className="d-block my-3 text-end" onClick={handleCreateAccount}>Create account</button>
         </div>
     );
 }

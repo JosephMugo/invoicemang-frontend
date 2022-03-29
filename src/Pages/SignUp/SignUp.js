@@ -5,16 +5,13 @@ import passwordBlacklist from '../../resources/passwordBlacklist';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import AuthService from '../../services/auth.service';
 
 const SignUpSchema = yup.object({
-    firstName: yup
-        .string('Enter first name')
-        .min(3, 'First name should be a minimum 3 characters long')
-        .required('First name is required'),
-    lastName: yup
-        .string('Enter last name')
-        .min(3, 'Last name should be a minimum 3 characters long')
-        .required('Last name is required'),
+    username: yup
+        .string('Enter username')
+        .min(3, 'Username must be a minimum of 3 characters long')
+        .required('Username is required'),
     email: yup
         .string('Enter email')
         .email('Enter a valid email')
@@ -36,19 +33,19 @@ const SignUp = () => {
 
     const {handleSubmit, handleChange} = useFormik({
         initialValues: {
-            firstName: '',
-            lastName: '',
+            username: '',
             email: '',
-            phoneNumber: '',
             password: '',
         },
         validationSchema: SignUpSchema,
         onSubmit: (data) => {
-            alert(JSON.stringify(data, null, 2));
+            AuthService.register(data.username, data.email, data.password)
+            .then(() => history.push('/login'));
         }
     })
 
-    const handleSignup = () => {
+    const handleLogin = (event) => {
+        event.preventDefault()
         history.push('/login')
     }
     
@@ -63,12 +60,8 @@ const SignUp = () => {
                     <h4 className="mt-2" style={{margin: 0}}>InvoiceMang</h4>
                 </div>
                 <div class="form-floating mb-4">
-                    <input name="firstName" type="text" class="form-control"  onChange={handleChange} />
-                    <label for="floatingInput">First Name</label>
-                </div>
-                <div class="form-floating mb-4">
-                    <input name="lastName" type="text" class="form-control" onChange={handleChange} />
-                    <label for="floatingInput">Last Name</label>
+                    <input name="username" type="text" class="form-control"  onChange={handleChange} />
+                    <label for="floatingInput">Username</label>
                 </div>
                 <div class="form-floating mb-4">
                     <input name="email" type="text" class="form-control"  onChange={handleChange} />
@@ -83,8 +76,8 @@ const SignUp = () => {
                     <label for="floatingInput">Cofirm Password</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Register</button>
+                <button id="login-link" className="d-block my-3 text-end" href="#login" onClick={handleLogin}>Login</button>
             </form>
-            <button id="login-link" className="d-block my-3 text-end" href="#login" onClick={handleSignup}>Login</button>
         </div>
     );
 }
